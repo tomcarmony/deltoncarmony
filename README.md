@@ -15,11 +15,10 @@ External assets are loaded from CDNs (Google Fonts, QRCode.js, Cusdis).
 
 ## Repo layout
 
-| File         | Purpose                        |
-|-------------|--------------------------------|
-| `index.html` | Full page (HTML + CSS + JS)    |
-| `preview.py` | Local HTTP server for previews |
-| `README.md`  | This file                      |
+| File        | Purpose                    |
+|------------|----------------------------|
+| `index.html` | Full page (HTML + CSS + JS) |
+| `README.md`  | This file                  |
 
 ## Hosting
 
@@ -35,8 +34,6 @@ Before going live, update:
 
 Static pages behave more predictably when served over HTTP than when opened as a `file://` URL (CDN scripts may still load; relative paths and some APIs behave better on a server).
 
-### Option A — one command (recommended)
-
 From the project directory:
 
 ```bash
@@ -48,16 +45,6 @@ python3 -m http.server 8000
 Then open **http://localhost:8000/** in your browser. Press **Ctrl+C** in the Terminal to stop the server.
 
 *(If `python3` is unavailable, try `python` on older systems.)*
-
-### Option B — `preview.py` in this repo
-
-From the project directory:
-
-```bash
-python3 preview.py
-```
-
-This runs the same kind of handler as Option A (`ThreadingHTTPServer` + `SimpleHTTPRequestHandler`). The script is **`preview.py`** at the repo root.
 
 ---
 

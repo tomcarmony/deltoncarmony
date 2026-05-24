@@ -266,9 +266,24 @@
   }
   .venmo-badge:hover { background: #0070cc; }
 
-  /* ── Guestbook / Comments ── */
+  /* ── Guestbook / Cusdis ── */
   .guestbook {
     margin: 4rem 0 2rem;
+  }
+
+  /* Avoid short iframe + inner scrollbar (height tightened when widget renders — see script below). */
+  #cusdis_thread {
+    min-height: 0;
+    width: 100%;
+  }
+
+  #cusdis_thread iframe {
+    display: block;
+    width: 100%;
+    min-height: 280px;
+    border: 0;
+    overflow: hidden;
+    box-sizing: border-box;
   }
 
   .section-heading {
@@ -560,26 +575,13 @@
     <div id="cusdis_thread"
       data-host="https://cusdis.com"
       data-app-id="9cc2e4d8-4f40-4b1a-88d5-17dd54fad1c8"
+      data-theme="light"
       data-page-id="{{ PAGE_ID }}"
       data-page-url="{{ PAGE_URL }}"
       data-page-title="{{ PAGE_TITLE }}"
     ></div>
     <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 
-
-    <!-- Comment list -->
-    <div class="comment-list" id="comment-list">
-      <div class="no-comments" id="no-comments">
-        Be the first to leave a message for the graduate!
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ FOOTER ══ -->
-  <footer>
-    <p class="footer-name">Delton Carmony</p>
-    <p>Class of 2026 &nbsp;·&nbsp; Seattle, WA</p>
-  </footer>
 
 </div><!-- /page -->
 
@@ -597,6 +599,89 @@
     colorLight: '#FFF9F2',
     correctLevel: QRCode.CorrectLevel.M
   });
+
+
+  /* Cusdis uses a fixed iframe + postMessage("resize"); this aligns height with nested content (same-origin srcdoc iframe). */
+  (function initCusdisIframeHeight() {
+    const thread = document.getElementById('cusdis_thread');
+    if (!thread) return;
+
+    function measureAndSetHeight(iframe) {
+      iframe.style.overflow = 'hidden';
+
+      try {
+        const doc = iframe.contentDocument;
+        if (!doc || !doc.body) return;
+
+        doc.documentElement.style.overflow = 'hidden';
+        doc.body.style.overflow = 'hidden';
+
+        const scrollH = Math.max(
+          doc.documentElement.scrollHeight,
+          doc.body.scrollHeight
+        );
+
+        const fromParsed = parseFloat(iframe.style.height);
+        let h = scrollH > 48 ? scrollH + 28 : scrollH || 280;
+        if (Number.isFinite(fromParsed) && fromParsed > 48) {
+          h = Math.max(h, Math.ceil(fromParsed));
+        }
+        iframe.style.height = `${Math.ceil(Math.max(h, 280))}px`;
+      } catch { /* restricted / not ready */ }
+    }
+
+    function wireIframe(iframe) {
+      if (iframe.dataset.deltonFullHeightBound) return;
+      iframe.dataset.deltonFullHeightBound = '1';
+
+      const resize = () => measureAndSetHeight(iframe);
+
+      iframe.addEventListener('load', resize);
+
+      window.addEventListener('message', (event) => {
+        try {
+          const msg = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+          if (msg && msg.from === 'cusdis' && (msg.event === 'resize' || msg.event === 'onload')) {
+            requestAnimationFrame(resize);
+          }
+        } catch { /* ignore */ }
+      });
+
+      try {
+        const doc = iframe.contentDocument;
+        if (doc.body) {
+          new MutationObserver(() => requestAnimationFrame(resize)).observe(doc.documentElement, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            characterData: true,
+          });
+
+          if (typeof ResizeObserver !== 'undefined') {
+            const ro = new ResizeObserver(() => requestAnimationFrame(resize));
+            ro.observe(doc.body);
+          }
+        }
+      } catch { /* ignore */ }
+
+      let ticks = 0;
+      const poller = window.setInterval(() => {
+        resize();
+        if (++ticks > 120) window.clearInterval(poller);
+      }, 220);
+
+      resize();
+    }
+
+    function tryAttach() {
+      const iframe = thread.querySelector('iframe');
+      if (iframe) wireIframe(iframe);
+    }
+
+    tryAttach();
+    const mo = new MutationObserver(() => tryAttach());
+    mo.observe(thread, { childList: true, subtree: true });
+  })();
 
 
   const STORAGE_KEY = 'grad_comments_2025';
@@ -617,9 +702,11 @@
   }
 
   function renderComments() {
-    const comments = loadComments();
     const list = document.getElementById('comment-list');
     const noMsg = document.getElementById('no-comments');
+    if (!list || !noMsg) return;
+
+    const comments = loadComments();
 
     // Remove existing comment items (not the no-comments div)
     list.querySelectorAll('.comment-item').forEach(el => el.remove());
