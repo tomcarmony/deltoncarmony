@@ -20,9 +20,8 @@
     --ink: #1C1A17;
     --ink-soft: #3D3830;
     --ink-muted: #7A7269;
-    --gold: #B8860B;
-    --gold-light: #D4A830;
-    --gold-pale: #F5EDDA;
+    --accent: #CC0014;
+    --accent-hover: #A30011;
     --border: rgba(90, 75, 50, 0.18);
     --border-strong: rgba(90, 75, 50, 0.35);
     --serif: 'Playfair Display', Georgia, serif;
@@ -51,9 +50,16 @@
 
   /* ── Header ── */
   header {
-    padding: 5rem 0 3rem;
+    padding: 3rem 0 1rem;
     text-align: center;
     position: relative;
+  }
+
+  .header-logo {
+    display: block;
+    width: 80px;
+    height: auto;
+    margin: 0 auto 1.35rem;
   }
 
   .pre-heading {
@@ -61,7 +67,7 @@
     font-size: 11px;
     letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--accent);
     margin-bottom: 1.5rem;
   }
 
@@ -76,7 +82,7 @@
 
   h1 em {
     font-style: italic;
-    color: var(--gold);
+    color: var(--accent);
   }
 
   .header-rule {
@@ -96,7 +102,7 @@
   .header-rule-diamond {
     width: 8px;
     height: 8px;
-    background: var(--gold);
+    background: var(--accent);
     transform: rotate(45deg);
     flex-shrink: 0;
   }
@@ -169,20 +175,7 @@
     padding: 3rem;
     background: var(--warm-white);
     border: 1px solid var(--border);
-    border-top: 3px solid var(--gold);
-    position: relative;
-  }
-
-  .announcement::before {
-    content: '"';
-    font-family: var(--serif);
-    font-size: 6rem;
-    color: var(--gold-pale);
-    position: absolute;
-    top: -0.5rem;
-    left: 1.5rem;
-    line-height: 1;
-    pointer-events: none;
+    border-top: 3px solid var(--accent);
   }
 
   .announcement p {
@@ -190,16 +183,6 @@
     color: var(--ink-soft);
   }
   .announcement p:last-child { margin-bottom: 0; }
-
-  .announcement h2 {
-    font-family: var(--serif);
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: var(--ink);
-    margin-bottom: 1.25rem;
-  }
-
-
 
   .gift-section {
     display: grid;
@@ -266,24 +249,9 @@
   }
   .venmo-badge:hover { background: #0070cc; }
 
-  /* ── Guestbook / Cusdis ── */
+  /* ── Guestbook / Comments ── */
   .guestbook {
     margin: 4rem 0 2rem;
-  }
-
-  /* Avoid short iframe + inner scrollbar (height tightened when widget renders — see script below). */
-  #cusdis_thread {
-    min-height: 0;
-    width: 100%;
-  }
-
-  #cusdis_thread iframe {
-    display: block;
-    width: 100%;
-    min-height: 280px;
-    border: 0;
-    overflow: hidden;
-    box-sizing: border-box;
   }
 
   .section-heading {
@@ -349,7 +317,7 @@
 
   .form-group input:focus,
   .form-group textarea:focus {
-    border-color: var(--gold);
+    border-color: var(--accent);
   }
 
   .form-group textarea {
@@ -358,7 +326,7 @@
 
   .submit-btn {
     display: inline-block;
-    background: var(--gold);
+    background: var(--accent);
     color: white;
     font-family: var(--body);
     font-size: 13px;
@@ -370,7 +338,7 @@
     transition: background 0.2s;
     margin-top: 1rem;
   }
-  .submit-btn:hover { background: var(--gold-light); }
+  .submit-btn:hover { background: var(--accent-hover); }
   .submit-btn:disabled { opacity: 0.5; cursor: default; }
 
   .comment-list {
@@ -380,11 +348,10 @@
   }
 
   .comment-item {
-    border-left: 2px solid var(--gold-pale);
     padding: 1rem 1.5rem;
     background: var(--warm-white);
     border: 1px solid var(--border);
-    border-left: 3px solid var(--gold);
+    border-left: 3px solid var(--accent);
     animation: fadeIn 0.4s ease;
   }
 
@@ -415,7 +382,7 @@
 
   .comment-relation {
     font-size: 12px;
-    color: var(--gold);
+    color: var(--accent);
     letter-spacing: 0.08em;
     margin-bottom: 0.5rem;
   }
@@ -456,7 +423,7 @@
     font-family: var(--serif);
     font-size: 1.5rem;
     font-style: italic;
-    color: var(--gold);
+    color: var(--accent);
     margin-bottom: 0.25rem;
   }
 
@@ -469,12 +436,11 @@
   /* ── Responsive ── */
   @media (max-width: 600px) {
     .page { padding: 0 1rem; }
-    header { padding: 3rem 0 2rem; }
+    header { padding: 2rem 0 2rem; }
     .photos { grid-template-columns: 1fr; }
     .gift-section { grid-template-columns: 1fr; }
     .form-row { grid-template-columns: 1fr; }
     .announcement { padding: 1.5rem; }
-    .announcement::before { font-size: 4rem; }
   }
 
   @media print {
@@ -488,10 +454,11 @@
 
   <!-- ══ HEADER ══ -->
   <header>
+    <img class="header-logo" src="img/LincolnHS-Crest-160.png" alt="Lincoln High School logo" width="80" decoding="async">
     <p class="pre-heading">A Celebration of Achievement</p>
     <h1>Congratulations,<br><em>Delton!</em></h1>
     <div class="header-rule"><div class="header-rule-diamond"></div></div>
-    <p class="subtitle">Graduating with Honors from Lincoln High School in Seattle June 16, 2026. We are so proud of you!</p>
+    <p class="subtitle">Delton is graduating with Honors from Lincoln High School in Seattle on Tuesday,June 16, 2026.</p>
   </header>
 
   <!-- ══ PHOTOS ══ -->
@@ -527,7 +494,6 @@
 
   <!-- ══ ANNOUNCEMENT TEXT ══ -->
   <div class="announcement">
-    <h2>A Word from the Family</h2>
     <p>
       We are overjoyed to announce that <strong>Delton Carmony</strong> has graduated from
       <strong>Lincoln High School</strong> in Seattle, WA.
@@ -575,7 +541,6 @@
     <div id="cusdis_thread"
       data-host="https://cusdis.com"
       data-app-id="9cc2e4d8-4f40-4b1a-88d5-17dd54fad1c8"
-      data-theme="light"
       data-page-id="{{ PAGE_ID }}"
       data-page-url="{{ PAGE_URL }}"
       data-page-title="{{ PAGE_TITLE }}"
@@ -601,89 +566,6 @@
   });
 
 
-  /* Cusdis uses a fixed iframe + postMessage("resize"); this aligns height with nested content (same-origin srcdoc iframe). */
-  (function initCusdisIframeHeight() {
-    const thread = document.getElementById('cusdis_thread');
-    if (!thread) return;
-
-    function measureAndSetHeight(iframe) {
-      iframe.style.overflow = 'hidden';
-
-      try {
-        const doc = iframe.contentDocument;
-        if (!doc || !doc.body) return;
-
-        doc.documentElement.style.overflow = 'hidden';
-        doc.body.style.overflow = 'hidden';
-
-        const scrollH = Math.max(
-          doc.documentElement.scrollHeight,
-          doc.body.scrollHeight
-        );
-
-        const fromParsed = parseFloat(iframe.style.height);
-        let h = scrollH > 48 ? scrollH + 28 : scrollH || 280;
-        if (Number.isFinite(fromParsed) && fromParsed > 48) {
-          h = Math.max(h, Math.ceil(fromParsed));
-        }
-        iframe.style.height = `${Math.ceil(Math.max(h, 280))}px`;
-      } catch { /* restricted / not ready */ }
-    }
-
-    function wireIframe(iframe) {
-      if (iframe.dataset.deltonFullHeightBound) return;
-      iframe.dataset.deltonFullHeightBound = '1';
-
-      const resize = () => measureAndSetHeight(iframe);
-
-      iframe.addEventListener('load', resize);
-
-      window.addEventListener('message', (event) => {
-        try {
-          const msg = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-          if (msg && msg.from === 'cusdis' && (msg.event === 'resize' || msg.event === 'onload')) {
-            requestAnimationFrame(resize);
-          }
-        } catch { /* ignore */ }
-      });
-
-      try {
-        const doc = iframe.contentDocument;
-        if (doc.body) {
-          new MutationObserver(() => requestAnimationFrame(resize)).observe(doc.documentElement, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            characterData: true,
-          });
-
-          if (typeof ResizeObserver !== 'undefined') {
-            const ro = new ResizeObserver(() => requestAnimationFrame(resize));
-            ro.observe(doc.body);
-          }
-        }
-      } catch { /* ignore */ }
-
-      let ticks = 0;
-      const poller = window.setInterval(() => {
-        resize();
-        if (++ticks > 120) window.clearInterval(poller);
-      }, 220);
-
-      resize();
-    }
-
-    function tryAttach() {
-      const iframe = thread.querySelector('iframe');
-      if (iframe) wireIframe(iframe);
-    }
-
-    tryAttach();
-    const mo = new MutationObserver(() => tryAttach());
-    mo.observe(thread, { childList: true, subtree: true });
-  })();
-
-
   const STORAGE_KEY = 'grad_comments_2025';
 
   function loadComments() {
@@ -702,11 +584,9 @@
   }
 
   function renderComments() {
+    const comments = loadComments();
     const list = document.getElementById('comment-list');
     const noMsg = document.getElementById('no-comments');
-    if (!list || !noMsg) return;
-
-    const comments = loadComments();
 
     // Remove existing comment items (not the no-comments div)
     list.querySelectorAll('.comment-item').forEach(el => el.remove());

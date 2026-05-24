@@ -34,6 +34,8 @@ Before going live, update:
 
 Static pages behave more predictably when served over HTTP than when opened as a `file://` URL (CDN scripts may still load; relative paths and some APIs behave better on a server).
 
+### Option A — one command (recommended)
+
 From the project directory:
 
 ```bash
@@ -45,6 +47,25 @@ python3 -m http.server 8000
 Then open **http://localhost:8000/** in your browser. Press **Ctrl+C** in the Terminal to stop the server.
 
 *(If `python3` is unavailable, try `python` on older systems.)*
+
+### Option B — small Python script
+
+Save as `preview.py` next to `index.html` (or paste into Terminal with `python3 -`), then run **`python3 preview.py`**:
+
+```python
+#!/usr/bin/env python3
+"""Serve the current folder on http://127.0.0.1:8000 for local previews."""
+
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+HOST, PORT = "127.0.0.1", 8000
+
+if __name__ == "__main__":
+    httpd = ThreadingHTTPServer((HOST, PORT), SimpleHTTPRequestHandler)
+    print(f"Serving Delton Carmony preview at http://{HOST}:{PORT}/")
+    print("Open that URL in a browser (index.html loads by default). Ctrl+C to stop.")
+    httpd.serve_forever()
+```
 
 ---
 
