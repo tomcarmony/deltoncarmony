@@ -9,7 +9,7 @@ Static graduation announcement site for **Delton Carmony** (Lincoln High School,
 - **Family announcement** section
 - **Share card** with a QR code pointing at the current page URL (`PAGE_URL` in the script—you can pin a canonical URL once the site is live)
 - **Venmo / gift** call-to-action (`@tomcarmony`; update handles and links as needed)
-- **Guestbook** via [Cusdis](https://cusdis.com/) embed (`data-app-id` and related attributes in `index.html`)
+- **Family & Friends** comment section ([Cusdis](https://cusdis.com/) embed; `data-app-id` and related attributes in `index.html`)
 
 External assets are loaded from CDNs (Google Fonts, QRCode.js, Cusdis).
 

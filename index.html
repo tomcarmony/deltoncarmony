@@ -249,9 +249,23 @@
   }
   .venmo-badge:hover { background: #0070cc; }
 
-  /* ── Guestbook / Comments ── */
+  /* ── Guestbook / Cusdis ── */
   .guestbook {
     margin: 4rem 0 2rem;
+  }
+
+  #cusdis_thread {
+    min-height: 0;
+    width: 100%;
+  }
+
+  #cusdis_thread iframe {
+    display: block;
+    width: 100%;
+    min-height: 280px;
+    border: 0;
+    overflow: hidden;
+    box-sizing: border-box;
   }
 
   .section-heading {
@@ -271,7 +285,7 @@
   .section-heading-line {
     flex: 1;
     height: 1px;
-    background: var(--border-strong);
+    background: var(--accent);
   }
 
   .comment-form {
@@ -530,10 +544,10 @@
     </div>
   </div>
 
-  <!-- ══ GUESTBOOK ══ -->
+  <!-- ══ COMMENTS (Cusdis) ══ -->
   <div class="guestbook">
     <div class="section-heading">
-      <h2>Guestbook</h2>
+      <h2>Congrats from Family &amp; Friends</h2>
       <div class="section-heading-line"></div>
     </div>
 
@@ -541,10 +555,19 @@
     <div id="cusdis_thread"
       data-host="https://cusdis.com"
       data-app-id="9cc2e4d8-4f40-4b1a-88d5-17dd54fad1c8"
+      data-theme="light"
       data-page-id="{{ PAGE_ID }}"
       data-page-url="{{ PAGE_URL }}"
       data-page-title="{{ PAGE_TITLE }}"
     ></div>
+    <script>
+      window.CUSDIS_LOCALE = Object.assign({}, window.CUSDIS_LOCALE, {
+        nickname: 'Your Name',
+        reply_placeholder: 'Leave a Comment for Del...',
+        post_comment: 'Submit',
+        nickname_is_required: 'Your name is required.',
+      });
+    </script>
     <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 
 
@@ -565,6 +588,284 @@
     correctLevel: QRCode.CorrectLevel.M
   });
 
+  /*
+   Cusdis: Same-origin srcdoc iframe. Auto-height avoids an inner scrollbar; theme CSS is injected inside the iframe (parent styles do not apply there).
+   */
+  (function initCusdisEmbed() {
+    const thread = document.getElementById('cusdis_thread');
+    if (!thread) return;
+
+    const themeCss = `
+html {
+  color-scheme: light !important;
+}
+
+html,
+body {
+  margin: 0;
+  background: #FAF7F2 !important;
+  color: #1C1A17 !important;
+}
+
+#root {
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 17px !important;
+  line-height: 1.75 !important;
+  color: #1C1A17 !important;
+  background: transparent !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root textarea,
+#root input[type=text],
+#root input[type=email],
+#root input[type=password] {
+  box-sizing: border-box;
+  background: #FFF9F2 !important;
+  border: 1px solid rgba(90,75,50,0.35) !important;
+  border-radius: 4px !important;
+  color: #1C1A17 !important;
+  padding: 0.55rem 0.85rem !important;
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 16px !important;
+  outline: none !important;
+}
+
+#root textarea:focus,
+#root input:focus {
+  border-color: #CC0014 !important;
+}
+
+#root textarea::placeholder,
+#root input::placeholder {
+  color: #7A7269 !important;
+  opacity: 1 !important;
+}
+
+/* Primary buttons (Tailwind bg-blue-500) → school accent red */
+#root button.bg-blue-500,
+#root .bg-blue-500 {
+  background: #CC0014 !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 0.55rem 1.05rem !important;
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 14px !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background 0.2s !important;
+}
+
+#root button.bg-blue-500:hover,
+#root .bg-blue-500:hover {
+  background: #A30011 !important;
+}
+
+#root button.text-white.bg-blue-500,
+#root .text-white.bg-blue-500 {
+  color: #ffffff !important;
+}
+
+#root .font-bold.text-gray-900 {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-weight: 600 !important;
+  color: #1C1A17 !important;
+}
+
+#root .text-gray-900 {
+  color: #1C1A17 !important;
+}
+
+#root .text-gray-500 {
+  color: #7A7269 !important;
+}
+
+#root .text-gray-100,
+#root .text-gray-200,
+#root .text-gray-400 {
+  color: #3D3830 !important;
+}
+
+#root blockquote {
+  margin: 1rem 0;
+  background: #F9E8EA !important;
+  border-left: 3px solid #CC0014 !important;
+  padding: 0.85rem 1rem !important;
+  border-radius: 0 !important;
+}
+
+#root .bg-gray-100 {
+  background: #EDE4D5 !important;
+}
+
+#root .bg-gray-200 {
+  background: #FFF9F2 !important;
+  border: 1px solid rgba(90,75,50,0.18) !important;
+  border-radius: 4px !important;
+}
+
+#root .border.border-gray-200,
+#root .border-gray-200 {
+  border-color: rgba(90,75,50,0.18) !important;
+}
+
+#root .border-l-2.border-gray-200,
+#root .border.border-gray-200.border-l-2 {
+  border-left-width: 3px !important;
+  border-left-color: #CC0014 !important;
+}
+
+#root a {
+  color: #CC0014 !important;
+  text-underline-offset: 2px;
+}
+
+#root a.text-gray-500,
+#root a.text-gray-500.underline {
+  color: #7A7269 !important;
+}
+
+#root a[href*="cusdis"],
+#root a[href*="cusdis"]:hover,
+#root a[href*="cusdis"]:visited {
+  color: #1C1A17 !important;
+}
+
+#root hr {
+  border-top-color: rgba(90,75,50,0.18) !important;
+  border-style: solid none none !important;
+}
+`.trim();
+
+    function injectTheme(iframe) {
+      try {
+        const doc = iframe.contentDocument;
+        if (!doc || !doc.head) return;
+        if (doc.getElementById('delton-cusdis-theme')) return;
+
+        const fonts =
+          'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap';
+
+        let p1 = doc.querySelector('link[data-delton-preconnect-google]');
+        if (!p1) {
+          p1 = doc.createElement('link');
+          p1.rel = 'preconnect';
+          p1.href = 'https://fonts.googleapis.com';
+          p1.setAttribute('data-delton-preconnect-google', '1');
+          doc.head.insertAdjacentElement('afterbegin', p1);
+        }
+        let p2 = doc.querySelector('link[data-delton-preconnect-gstatic]');
+        if (!p2) {
+          p2 = doc.createElement('link');
+          p2.rel = 'preconnect';
+          p2.href = 'https://fonts.gstatic.com';
+          p2.crossOrigin = 'anonymous';
+          p2.setAttribute('data-delton-preconnect-gstatic', '1');
+          p1.insertAdjacentElement('afterend', p2);
+        }
+
+        let linkEl = doc.querySelector('link[data-delton-cusdis-font]');
+        if (!linkEl) {
+          linkEl = doc.createElement('link');
+          linkEl.rel = 'stylesheet';
+          linkEl.href = fonts;
+          linkEl.setAttribute('data-delton-cusdis-font', '1');
+          doc.head.appendChild(linkEl);
+        }
+
+        const styleEl = doc.createElement('style');
+        styleEl.id = 'delton-cusdis-theme';
+        styleEl.textContent = themeCss;
+        doc.head.append(styleEl);
+      } catch { /* iframe not readable */ }
+    }
+
+    function setIframeHeight(iframe) {
+      iframe.style.overflow = 'hidden';
+
+      try {
+        const doc = iframe.contentDocument;
+        if (!doc || !doc.body) return;
+
+        injectTheme(iframe);
+
+        /*
+          Do NOT set overflow:hidden on the iframe document/body — it clamps scrollHeight
+          to ~viewport height and Cusdis iframe resize breaks (tiny fixed iframe + scrollbar).
+          The outer iframe hides overflow instead.
+        */
+        doc.documentElement.style.overflow = '';
+        doc.body.style.overflow = '';
+
+        const scrollH = Math.max(
+          doc.documentElement.scrollHeight,
+          doc.body.scrollHeight,
+          doc.documentElement.offsetHeight,
+          doc.body.offsetHeight
+        );
+
+        const parsed = parseFloat(iframe.style.height);
+        let h = scrollH > 48 ? scrollH + 48 : scrollH || 280;
+        if (Number.isFinite(parsed) && parsed > 48) {
+          h = Math.max(h, Math.ceil(parsed));
+        }
+        iframe.style.height = `${Math.ceil(Math.max(h, 280))}px`;
+      } catch { /* restricted / not ready */ }
+    }
+
+    function bindIframe(iframe) {
+      if (iframe.dataset.deltonCusdisBound === '1') return;
+      iframe.dataset.deltonCusdisBound = '1';
+
+      const resize = () => setIframeHeight(iframe);
+
+      iframe.addEventListener('load', resize);
+
+      window.addEventListener('message', (event) => {
+        try {
+          const msg = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+          if (msg && msg.from === 'cusdis' && (msg.event === 'resize' || msg.event === 'onload')) {
+            requestAnimationFrame(resize);
+          }
+        } catch { /* ignore */ }
+      });
+
+      try {
+        const doc = iframe.contentDocument;
+        if (doc.body) {
+          new MutationObserver(() => requestAnimationFrame(resize)).observe(doc.documentElement, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            characterData: true,
+          });
+
+          if (typeof ResizeObserver !== 'undefined') {
+            const ro = new ResizeObserver(() => requestAnimationFrame(resize));
+            ro.observe(doc.body);
+          }
+        }
+      } catch { /* ignore */ }
+
+      let ticks = 0;
+      const poller = window.setInterval(() => {
+        resize();
+        if (++ticks > 120) window.clearInterval(poller);
+      }, 220);
+
+      resize();
+    }
+
+    function attach() {
+      const iframe = thread.querySelector('iframe');
+      if (iframe) bindIframe(iframe);
+    }
+
+    attach();
+    new MutationObserver(attach).observe(thread, { childList: true, subtree: true });
+  })();
 
   const STORAGE_KEY = 'grad_comments_2025';
 
@@ -584,9 +885,11 @@
   }
 
   function renderComments() {
-    const comments = loadComments();
     const list = document.getElementById('comment-list');
     const noMsg = document.getElementById('no-comments');
+    if (!list || !noMsg) return;
+
+    const comments = loadComments();
 
     // Remove existing comment items (not the no-comments div)
     list.querySelectorAll('.comment-item').forEach(el => el.remove());
@@ -620,6 +923,8 @@
   }
 
   function submitComment() {
+    if (!document.getElementById('name')) return;
+
     const name = document.getElementById('name').value.trim();
     const relation = document.getElementById('relation').value.trim();
     const message = document.getElementById('message').value.trim();
@@ -630,6 +935,8 @@
     }
 
     const btn = document.getElementById('submit-btn');
+    if (!btn) return;
+
     btn.disabled = true;
 
     const comments = loadComments();
@@ -643,8 +950,10 @@
 
     // Show success
     const msg = document.getElementById('success-msg');
-    msg.style.display = 'block';
-    setTimeout(() => { msg.style.display = 'none'; }, 4000);
+    if (msg) {
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 4000);
+    }
 
     renderComments();
     btn.disabled = false;
