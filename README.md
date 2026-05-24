@@ -1,2 +1,64 @@
-# deltoncarmony
-Del's graduate announcement
+# Delton Carmony — Class of 2026
+
+Static graduation announcement site for **Delton Carmony** (Lincoln High School, Seattle · June 16, 2026). Everything lives in one self-contained **`index.html`**: typography, layout, embedded scripts, and styles—no build step.
+
+## What's on the page
+
+- **Header & copy** celebrating graduation and plans (McGill University, Fall 2026)
+- **Photo grid** (placeholder slots; swap in `<img>` tags and captions when you have photos)
+- **Family announcement** section
+- **Share card** with a QR code pointing at the current page URL (`PAGE_URL` in the script—you can pin a canonical URL once the site is live)
+- **Venmo / gift** call-to-action (`@tomcarmony`; update handles and links as needed)
+- **Guestbook** via [Cusdis](https://cusdis.com/) embed (`data-app-id` and related attributes in `index.html`)
+
+External assets are loaded from CDNs (Google Fonts, QRCode.js, Cusdis).
+
+## Repo layout
+
+| File         | Purpose                        |
+|-------------|--------------------------------|
+| `index.html` | Full page (HTML + CSS + JS)    |
+| `preview.py` | Local HTTP server for previews |
+| `README.md`  | This file                      |
+
+## Hosting
+
+This repo is GitHub Pages–friendly: enable Pages for the branch that contains `index.html` (typically **root** of the repo, or **`/docs`** if you prefer). The QR code uses `window.location.href` when opened in a browser, so it resolves to whichever URL visitors use once deployed.
+
+Before going live, update:
+
+- Cusdis placeholders / `data-*` attributes on `#cusdis_thread` so comments work on production
+- `PAGE_URL` fallback in the QR script if you want a fixed domain when testing from `file://`
+- Photo placeholders, Venmo link, and any personal copy in the markup
+
+## Preview on localhost
+
+Static pages behave more predictably when served over HTTP than when opened as a `file://` URL (CDN scripts may still load; relative paths and some APIs behave better on a server).
+
+### Option A — one command (recommended)
+
+From the project directory:
+
+```bash
+cd /path/to/deltoncarmony
+
+python3 -m http.server 8000
+```
+
+Then open **http://localhost:8000/** in your browser. Press **Ctrl+C** in the Terminal to stop the server.
+
+*(If `python3` is unavailable, try `python` on older systems.)*
+
+### Option B — `preview.py` in this repo
+
+From the project directory:
+
+```bash
+python3 preview.py
+```
+
+This runs the same kind of handler as Option A (`ThreadingHTTPServer` + `SimpleHTTPRequestHandler`). The script is **`preview.py`** at the repo root.
+
+---
+
+*Delton — Class of 2026 · Seattle, WA*
