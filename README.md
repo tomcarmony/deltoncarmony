@@ -5,7 +5,7 @@ Static graduation announcement site for **Delton Carmony** (Lincoln High School,
 ## What's on the page
 
 - **Header & copy** celebrating graduation and plans (McGill University, Fall 2026)
-- **Photo grid** (placeholder slots; swap in `<img>` tags and captions when you have photos)
+- **Photo gallery** (`img/`): on wide layouts a fixed-aspect thumbnail grid crops with `object-fit: cover`; under ~900px width it uses masonry-style columns. Click opens full image in the lightbox.
 - **Family announcement** section
 - **Share card** with a QR code pointing at the current page URL (`PAGE_URL` in the script—you can pin a canonical URL once the site is live)
 - **Venmo / gift** call-to-action (`@tomcarmony`; update handles and links as needed)
@@ -18,6 +18,7 @@ External assets are loaded from CDNs (Google Fonts, QRCode.js, Cusdis).
 | File        | Purpose                    |
 |------------|----------------------------|
 | `index.html` | Full page (HTML + CSS + JS) |
+| `img/` | Gallery images (`delton-1.jpg` … `delton-7.jpg`; optional) |
 | `README.md`  | This file                  |
 
 ## Hosting
@@ -28,7 +29,8 @@ Before going live, update:
 
 - Cusdis placeholders / `data-*` attributes on `#cusdis_thread` so comments work on production
 - `PAGE_URL` fallback in the QR script if you want a fixed domain when testing from `file://`
-- Photo placeholders, Venmo link, and any personal copy in the markup
+- Gallery filenames in `#photo-gallery` / `img/` if you add or rename photos
+- Venmo link and any personal copy in the markup
 
 ## Preview on localhost
 
